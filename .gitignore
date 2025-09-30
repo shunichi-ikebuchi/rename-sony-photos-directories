@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+rename-sony-photos-directories
 
 # Test binary, built with `go test -c`
 *.test
