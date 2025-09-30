@@ -1,0 +1,4 @@
+target_path: /Volumes/1-1
+backup_path: /Volumes/1-2
+destination_path: /Volumes/a7iii
+tmp_dir: ~/Pictures/tmp
