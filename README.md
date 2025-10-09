@@ -64,7 +64,7 @@ tmp_dir: ~/Pictures/tmp            # Temporary directory for processing
 Or create a default configuration file:
 
 ```bash
-rename-sony-photos-directories -create-config
+rspd -create-config
 ```
 
 ## Usage
@@ -74,13 +74,13 @@ rename-sony-photos-directories -create-config
 Rename directories in the current directory:
 
 ```bash
-rename-sony-photos-directories
+rspd
 ```
 
 Rename directories in a specific path:
 
 ```bash
-rename-sony-photos-directories -path /Volumes/1-1/DCIM
+rspd -path /Volumes/1-1/DCIM
 ```
 
 ### Full Workflow - Copy, Rename, Delete
@@ -88,7 +88,7 @@ rename-sony-photos-directories -path /Volumes/1-1/DCIM
 Run the complete workflow (replaces the old shell script):
 
 ```bash
-rename-sony-photos-directories -workflow
+rspd -workflow
 ```
 
 This will:
@@ -103,7 +103,7 @@ This will:
 Delete all photos from backup SD card and eject it:
 
 ```bash
-rename-sony-photos-directories -backup-cleanup
+rspd -backup-cleanup
 ```
 
 ### Dry Run Mode
@@ -112,23 +112,23 @@ Preview what would be done without making any changes:
 
 ```bash
 # Test the full workflow
-rename-sony-photos-directories -workflow -dry-run
+rspd -workflow -dry-run
 
 # Test backup cleanup
-rename-sony-photos-directories -backup-cleanup -dry-run
+rspd -backup-cleanup -dry-run
 
 # Test rename only
-rename-sony-photos-directories -path /Volumes/1-1/DCIM -dry-run
+rspd -path /Volumes/1-1/DCIM -dry-run
 ```
 
 ### Using Configuration File
 
 ```bash
 # Use config.yaml from current directory or ~/.config
-rename-sony-photos-directories -workflow
+rspd -workflow
 
 # Specify a custom config file
-rename-sony-photos-directories -config /path/to/config.yaml -workflow
+rspd -config /path/to/config.yaml -workflow
 ```
 
 ### Command-Line Flags
@@ -151,7 +151,7 @@ If you were using the old shell scripts (`copy-and-delete.sh` and `delete.sh`), 
 
 **New way:**
 ```bash
-rename-sony-photos-directories -workflow
+rspd -workflow
 ```
 
 **Old way:**
@@ -161,7 +161,7 @@ rename-sony-photos-directories -workflow
 
 **New way:**
 ```bash
-rename-sony-photos-directories -backup-cleanup
+rspd -backup-cleanup
 ```
 
 The Go implementation provides:

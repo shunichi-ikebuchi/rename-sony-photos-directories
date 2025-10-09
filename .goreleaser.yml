@@ -14,8 +14,8 @@ builds:
     goarch:
       - amd64
       - arm64
-    main: ./cmd/rename-sony-photos-directories
-    binary: rename-sony-photos-directories
+    main: ./cmd/rspd
+    binary: rspd
     ldflags:
       - -s -w -X main.version={{.Version}}
 

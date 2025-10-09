@@ -36,7 +36,7 @@ go build -o rename-sony-photos-directories ./cmd/rename-sony-photos-directories
 ```
 rename-sony-photos-directories/
 ├── cmd/
-│   └── rename-sony-photos-directories/
+│   └── rspd/
 │       └── main.go                    # Application entry point
 ├── internal/
 │   ├── config/
@@ -249,7 +249,7 @@ The project uses GitHub Actions for CI/CD:
 
 ### Adding a New Command-Line Flag
 
-1. Add flag in `cmd/rename-sony-photos-directories/main.go`
+1. Add flag in `cmd/rspd/main.go`
 2. Update help text
 3. Update `docs/usage.md`
 4. Update README

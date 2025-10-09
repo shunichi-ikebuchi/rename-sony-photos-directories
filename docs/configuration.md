@@ -55,7 +55,7 @@ tmp_dir: ~/Pictures/tmp            # Temporary directory for processing
 ### Method 1: Auto-generate
 
 ```bash
-rename-sony-photos-directories -create-config
+rspd -create-config
 ```
 
 This creates `config.yaml` in the current directory with default values.
@@ -122,10 +122,10 @@ You can maintain multiple configuration files for different cameras or workflows
 
 ```bash
 # For Camera A
-rename-sony-photos-directories -config camera-a.yaml -workflow
+rspd -config camera-a.yaml -workflow
 
 # For Camera B
-rename-sony-photos-directories -config camera-b.yaml -workflow
+rspd -config camera-b.yaml -workflow
 ```
 
 ## Environment-Specific Configuration
