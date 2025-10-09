@@ -28,7 +28,9 @@ go install github.com/shunichi-ikebuchi/rename-sony-photos-directories/cmd/renam
 ```bash
 git clone https://github.com/shunichi-ikebuchi/rename-sony-photos-directories.git
 cd rename-sony-photos-directories
-go build
+make build
+# or
+go build -o rename-sony-photos-directories ./cmd/rename-sony-photos-directories
 ```
 
 ### Using GoReleaser (for releases)
@@ -174,13 +176,17 @@ The Go implementation provides:
 ### Running Tests
 
 ```bash
-go test -v -cover
+make test
+# or
+go test -v -cover ./...
 ```
 
 ### Building
 
 ```bash
-go build
+make build
+# or
+go build -o rename-sony-photos-directories ./cmd/rename-sony-photos-directories
 ```
 
 ### Building with GoReleaser
