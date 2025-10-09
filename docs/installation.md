@@ -34,7 +34,7 @@ Download the latest release from the [releases page](https://github.com/shunichi
 curl -L https://github.com/shunichi-ikebuchi/rename-sony-photos-directories/releases/latest/download/rename-sony-photos-directories_Darwin_x86_64.tar.gz | tar xz
 
 # Move to PATH
-sudo mv rename-sony-photos-directories /usr/local/bin/
+sudo mv rspd /usr/local/bin/
 ```
 
 #### Linux
@@ -44,7 +44,7 @@ sudo mv rename-sony-photos-directories /usr/local/bin/
 curl -L https://github.com/shunichi-ikebuchi/rename-sony-photos-directories/releases/latest/download/rename-sony-photos-directories_Linux_x86_64.tar.gz | tar xz
 
 # Move to PATH
-sudo mv rename-sony-photos-directories /usr/local/bin/
+sudo mv rspd /usr/local/bin/
 ```
 
 #### Windows
@@ -56,7 +56,7 @@ Download the `.zip` file from the releases page and extract it to a directory in
 Verify the installation:
 
 ```bash
-rename-sony-photos-directories -help
+rspd -help
 ```
 
 ## Updating

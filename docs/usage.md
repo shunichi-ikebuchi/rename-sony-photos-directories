@@ -7,13 +7,13 @@
 Rename directories in the current directory:
 
 ```bash
-rename-sony-photos-directories
+rspd
 ```
 
 Rename directories in a specific path:
 
 ```bash
-rename-sony-photos-directories -path /Volumes/1-1/DCIM
+rspd -path /Volumes/1-1/DCIM
 ```
 
 ### Full Workflow
@@ -21,7 +21,7 @@ rename-sony-photos-directories -path /Volumes/1-1/DCIM
 Run the complete workflow (copy, rename, delete, eject):
 
 ```bash
-rename-sony-photos-directories -workflow
+rspd -workflow
 ```
 
 This will:
@@ -36,7 +36,7 @@ This will:
 Delete all photos from backup SD card and eject it:
 
 ```bash
-rename-sony-photos-directories -backup-cleanup
+rspd -backup-cleanup
 ```
 
 ### Dry Run Mode
@@ -45,13 +45,13 @@ Preview what would be done without making any changes:
 
 ```bash
 # Test the full workflow
-rename-sony-photos-directories -workflow -dry-run
+rspd -workflow -dry-run
 
 # Test backup cleanup
-rename-sony-photos-directories -backup-cleanup -dry-run
+rspd -backup-cleanup -dry-run
 
 # Test rename only
-rename-sony-photos-directories -path /Volumes/1-1/DCIM -dry-run
+rspd -path /Volumes/1-1/DCIM -dry-run
 ```
 
 ## Configuration
@@ -65,7 +65,7 @@ The program looks for `config.yaml` in:
 Specify a custom config file:
 
 ```bash
-rename-sony-photos-directories -config /path/to/config.yaml -workflow
+rspd -config /path/to/config.yaml -workflow
 ```
 
 ### Creating Default Configuration
@@ -73,7 +73,7 @@ rename-sony-photos-directories -config /path/to/config.yaml -workflow
 Create a default configuration file:
 
 ```bash
-rename-sony-photos-directories -create-config
+rspd -create-config
 ```
 
 This creates `config.yaml` in the current directory with default values.
@@ -94,33 +94,33 @@ This creates `config.yaml` in the current directory with default values.
 
 ```bash
 cd /Volumes/1-1/DCIM
-rename-sony-photos-directories
+rspd
 ```
 
 ### Example 2: Full Workflow with Custom Config
 
 ```bash
-rename-sony-photos-directories -config ~/my-camera-config.yaml -workflow
+rspd -config ~/my-camera-config.yaml -workflow
 ```
 
 ### Example 3: Dry Run Before Actual Execution
 
 ```bash
 # First, check what will be done
-rename-sony-photos-directories -workflow -dry-run
+rspd -workflow -dry-run
 
 # If everything looks good, run for real
-rename-sony-photos-directories -workflow
+rspd -workflow
 ```
 
 ### Example 4: Backup Workflow
 
 ```bash
 # Process main SD card
-rename-sony-photos-directories -workflow
+rspd -workflow
 
 # Clean up backup SD card
-rename-sony-photos-directories -backup-cleanup
+rspd -backup-cleanup
 ```
 
 ## Common Workflows
@@ -128,13 +128,13 @@ rename-sony-photos-directories -backup-cleanup
 ### Photography Workflow
 
 1. Insert main SD card into card reader
-2. Run: `rename-sony-photos-directories -workflow`
+2. Run: `rspd -workflow`
 3. Insert backup SD card
-4. Run: `rename-sony-photos-directories -backup-cleanup`
+4. Run: `rspd -backup-cleanup`
 
 ### Safe Testing
 
-1. Create test config: `rename-sony-photos-directories -create-config`
+1. Create test config: `rspd -create-config`
 2. Edit config to point to test directories
-3. Test with dry-run: `rename-sony-photos-directories -workflow -dry-run`
-4. Execute: `rename-sony-photos-directories -workflow`
+3. Test with dry-run: `rspd -workflow -dry-run`
+4. Execute: `rspd -workflow`

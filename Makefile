@@ -13,7 +13,7 @@ help:
 # Build the binary
 build:
 	@echo "Building..."
-	go build -o rename-sony-photos-directories ./cmd/rename-sony-photos-directories
+	go build -o rspd ./cmd/rspd
 
 # Run tests
 test:
@@ -28,14 +28,14 @@ lint:
 # Clean build artifacts
 clean:
 	@echo "Cleaning..."
-	rm -f rename-sony-photos-directories
+	rm -f rspd
 	go clean
 
 # Install the binary
 install:
 	@echo "Installing..."
-	go install ./cmd/rename-sony-photos-directories
+	go install ./cmd/rspd
 
 # Run the application
 run: build
-	./rename-sony-photos-directories
+	./rspd

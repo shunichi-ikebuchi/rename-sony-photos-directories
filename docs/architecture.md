@@ -9,7 +9,7 @@ This project follows standard Go project layout with clear separation of concern
 ```
 rename-sony-photos-directories/
 ├── cmd/
-│   └── rename-sony-photos-directories/  # Application entry point
+│   └── rspd/  # Application entry point
 ├── internal/                            # Private application code
 │   ├── config/                          # Configuration management
 │   ├── rename/                          # Core renaming logic
@@ -77,7 +77,7 @@ Positions:
 - Platform-specific code isolated
 - Detailed error messages with context
 
-### 4. Main (`cmd/rename-sony-photos-directories`)
+### 4. Main (`cmd/rspd`)
 
 **Responsibility**: CLI interface and orchestration
 
