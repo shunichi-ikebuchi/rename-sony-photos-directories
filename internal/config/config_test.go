@@ -129,12 +129,15 @@ func TestSaveConfig(t *testing.T) {
 }
 
 func TestGetConfigPath(t *testing.T) {
-	// Save current directory
+	// Save current directory and HOME
 	originalWd, err := os.Getwd()
 	if err != nil {
 		t.Fatalf("Failed to get current directory: %v", err)
 	}
 	defer os.Chdir(originalWd)
+
+	originalHome := os.Getenv("HOME")
+	defer os.Setenv("HOME", originalHome)
 
 	// Create temporary directory
 	tmpDir, err := os.MkdirTemp("", "config-test-*")
@@ -142,6 +145,9 @@ func TestGetConfigPath(t *testing.T) {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
 	defer os.RemoveAll(tmpDir)
+
+	// Set HOME to temp directory to avoid finding existing config
+	os.Setenv("HOME", tmpDir)
 
 	// Change to temp directory
 	if err := os.Chdir(tmpDir); err != nil {
@@ -167,12 +173,15 @@ func TestGetConfigPath(t *testing.T) {
 }
 
 func TestLoadOrCreateConfig(t *testing.T) {
-	// Save current directory
+	// Save current directory and HOME
 	originalWd, err := os.Getwd()
 	if err != nil {
 		t.Fatalf("Failed to get current directory: %v", err)
 	}
 	defer os.Chdir(originalWd)
+
+	originalHome := os.Getenv("HOME")
+	defer os.Setenv("HOME", originalHome)
 
 	// Create temporary directory
 	tmpDir, err := os.MkdirTemp("", "config-test-*")
@@ -180,6 +189,9 @@ func TestLoadOrCreateConfig(t *testing.T) {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
 	defer os.RemoveAll(tmpDir)
+
+	// Set HOME to temp directory to avoid finding existing config
+	os.Setenv("HOME", tmpDir)
 
 	// Change to temp directory
 	if err := os.Chdir(tmpDir); err != nil {
