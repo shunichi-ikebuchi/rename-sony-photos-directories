@@ -1,14 +1,111 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/shunichi-ikebuchi/rename-sony-photos-directories/internal/config"
 	"github.com/shunichi-ikebuchi/rename-sony-photos-directories/internal/rename"
 	"github.com/shunichi-ikebuchi/rename-sony-photos-directories/internal/workflow"
+	"github.com/spf13/cobra"
 )
+
+var (
+	configPath string
+	dryRun     bool
+	targetPath string
+)
+
+func main() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+}
+
+var rootCmd = &cobra.Command{
+	Use:   "rename-sony-photos-directories",
+	Short: "Rename Sony photo directories",
+	Long:  `A tool to rename Sony camera photo directories with proper date formatting.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := loadConfiguration()
+		if err != nil {
+			return fmt.Errorf("failed to load config: %w", err)
+		}
+
+		return runRenameOnly(cfg)
+	},
+}
+
+var workflowCmd = &cobra.Command{
+	Use:   "workflow",
+	Short: "Run full workflow: copy, rename, and delete",
+	Long:  `Execute the complete workflow: copy files from source, rename directories, and delete originals.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := loadConfiguration()
+		if err != nil {
+			return fmt.Errorf("failed to load config: %w", err)
+		}
+
+		if dryRun {
+			log.Println("=== DRY RUN MODE ===")
+			log.Println("No actual changes will be made")
+		}
+		log.Println("Starting workflow: copy, rename, and delete")
+		if err := workflow.Run(cfg, dryRun); err != nil {
+			return fmt.Errorf("workflow failed: %w", err)
+		}
+		log.Println("Workflow completed successfully")
+		return nil
+	},
+}
+
+var backupCleanupCmd = &cobra.Command{
+	Use:   "backup-cleanup",
+	Short: "Delete files from backup SD card and eject",
+	Long:  `Clean up the backup SD card by deleting copied files and ejecting the card.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := loadConfiguration()
+		if err != nil {
+			return fmt.Errorf("failed to load config: %w", err)
+		}
+
+		if dryRun {
+			log.Println("=== DRY RUN MODE ===")
+			log.Println("No actual changes will be made")
+		}
+		log.Println("Starting backup cleanup")
+		if err := workflow.RunBackupCleanup(cfg, dryRun); err != nil {
+			return fmt.Errorf("backup cleanup failed: %w", err)
+		}
+		log.Println("Backup cleanup completed successfully")
+		return nil
+	},
+}
+
+var createConfigCmd = &cobra.Command{
+	Use:   "create-config",
+	Short: "Create a default configuration file",
+	Long:  `Generate a default configuration file (config.yaml) in the current directory.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return handleCreateConfig()
+	},
+}
+
+func init() {
+	// Global flags
+	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "", "Path to configuration file")
+	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "d", false, "Show what would be done without making any changes")
+
+	// Root command flags
+	rootCmd.Flags().StringVarP(&targetPath, "path", "p", "", "Target path to rename directories (overrides config)")
+
+	// Add subcommands
+	rootCmd.AddCommand(workflowCmd)
+	rootCmd.AddCommand(backupCleanupCmd)
+	rootCmd.AddCommand(createConfigCmd)
+}
 
 func handleCreateConfig() error {
 	defaultConfig := config.Default()
@@ -20,14 +117,14 @@ func handleCreateConfig() error {
 	return nil
 }
 
-func loadConfiguration(configPath string) (*config.Config, error) {
+func loadConfiguration() (*config.Config, error) {
 	if configPath != "" {
 		return config.Load(configPath)
 	}
 	return config.LoadOrDefault()
 }
 
-func runRenameOnly(cfg *config.Config, targetPath string, dryRun bool) error {
+func runRenameOnly(cfg *config.Config) error {
 	path := cfg.TargetPath
 	if targetPath != "" {
 		path = targetPath
@@ -51,56 +148,4 @@ func runRenameOnly(cfg *config.Config, targetPath string, dryRun bool) error {
 
 	log.Println("Directory renaming completed successfully")
 	return nil
-}
-
-func main() {
-	// Command line flags
-	configPath := flag.String("config", "", "Path to configuration file")
-	targetPath := flag.String("path", "", "Target path to rename directories (overrides config)")
-	createConfig := flag.Bool("create-config", false, "Create a default configuration file")
-	workflowFlag := flag.Bool("workflow", false, "Run full workflow: copy, rename, and delete")
-	backupCleanup := flag.Bool("backup-cleanup", false, "Delete files from backup SD card and eject")
-	dryRun := flag.Bool("dry-run", false, "Show what would be done without making any changes")
-	flag.Parse()
-
-	// Create default config if requested
-	if *createConfig {
-		if err := handleCreateConfig(); err != nil {
-			log.Fatal(err)
-		}
-		return
-	}
-
-	// Load configuration
-	cfg, err := loadConfiguration(*configPath)
-	if err != nil {
-		log.Fatalf("Failed to load config: %v", err)
-	}
-
-	// Execute based on command flags
-	if *workflowFlag {
-		if *dryRun {
-			log.Println("=== DRY RUN MODE ===")
-			log.Println("No actual changes will be made")
-		}
-		log.Println("Starting workflow: copy, rename, and delete")
-		if err := workflow.Run(cfg, *dryRun); err != nil {
-			log.Fatalf("Workflow failed: %v", err)
-		}
-		log.Println("Workflow completed successfully")
-	} else if *backupCleanup {
-		if *dryRun {
-			log.Println("=== DRY RUN MODE ===")
-			log.Println("No actual changes will be made")
-		}
-		log.Println("Starting backup cleanup")
-		if err := workflow.RunBackupCleanup(cfg, *dryRun); err != nil {
-			log.Fatalf("Backup cleanup failed: %v", err)
-		}
-		log.Println("Backup cleanup completed successfully")
-	} else {
-		if err := runRenameOnly(cfg, *targetPath, *dryRun); err != nil {
-			log.Fatal(err)
-		}
-	}
 }
