@@ -1,0 +1,16 @@
+# この repo の shell 基準 — dotfiles の個人 pre-push overlay を defer するための
+# project config。置くと hook は overlay の rcfile (enable=all + severity=style) を
+# 渡さなくなり、この repo の基準が権威になる。検査そのものは残る
+# (既定 severity=warning + この file の disable)。
+#
+# disable する 2 つは style 級で、引っかかっているのは **vendored の写し** の
+# third_party/gate-kit/go/*.sh (sha 6f87b452 で byte 固定。gate-kit-verify が
+# 書き換えを落とす) だけ。この repo 自身に .sh は無い (copy-and-delete.sh /
+# delete.sh は 2026-10-10 に rspd 本体へ移った)。
+#   SC2250 (全変数に braces) — script は $ROOT 形式 (bare) が主
+#   SC2292 ([ ] より [[ ]])  — [ ] が主
+# 先例: practice-os / repo-catalog が同じ 2 つを同じ理由で disable している。
+# gate-kit を re-sync すると同じ .sh が差分に出るので、その時にも要る。
+#
+# **disable しない**: SC2086 (unquoted expansion) 等 warning 以上は有効なまま。
+disable=SC2292,SC2250
