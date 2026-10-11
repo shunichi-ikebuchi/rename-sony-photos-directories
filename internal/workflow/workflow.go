@@ -136,12 +136,12 @@ func CheckDirectoryExists(path string) error {
 }
 
 // runWorkflow executes the copy-rename-delete workflow
-func Run(config *config.Config, dryRun bool) error {
-	tmpDir := config.TmpDir
-	sourceDCIM := filepath.Join(config.TargetPath, "DCIM")
+func Run(cfg *config.Config, dryRun bool) error {
+	tmpDir := cfg.TmpDir
+	sourceDCIM := filepath.Join(cfg.TargetPath, "DCIM")
 
 	// Check if source directory exists
-	if err := CheckDirectoryExists(config.DestinationPath); err != nil {
+	if err := CheckDirectoryExists(cfg.DestinationPath); err != nil {
 		return fmt.Errorf("destination check failed: %w", err)
 	}
 
@@ -172,8 +172,8 @@ func Run(config *config.Config, dryRun bool) error {
 		log.Printf("[DRY RUN] Would rename directories in: %s", tmpDir)
 	}
 
-	log.Printf("Copying renamed directories to %s", config.DestinationPath)
-	if err := CopyDir(tmpDir, config.DestinationPath, dryRun); err != nil {
+	log.Printf("Copying renamed directories to %s", cfg.DestinationPath)
+	if err := CopyDir(tmpDir, cfg.DestinationPath, dryRun); err != nil {
 		return fmt.Errorf("failed to copy to destination: %w", err)
 	}
 
@@ -188,7 +188,7 @@ func Run(config *config.Config, dryRun bool) error {
 	}
 
 	// Extract volume name from path (e.g., "/Volumes/1-1" -> "1-1")
-	volumeName := filepath.Base(config.TargetPath)
+	volumeName := filepath.Base(cfg.TargetPath)
 	log.Printf("Ejecting volume: %s", volumeName)
 	if err := EjectVolume(volumeName, dryRun); err != nil {
 		log.Printf("Warning: %v", err)
@@ -198,11 +198,11 @@ func Run(config *config.Config, dryRun bool) error {
 }
 
 // runBackupCleanup deletes all files from backup SD card and ejects it
-func RunBackupCleanup(config *config.Config, dryRun bool) error {
-	backupDCIM := filepath.Join(config.BackupPath, "DCIM")
+func RunBackupCleanup(cfg *config.Config, dryRun bool) error {
+	backupDCIM := filepath.Join(cfg.BackupPath, "DCIM")
 
 	// Check if backup directory exists
-	if err := CheckDirectoryExists(config.BackupPath); err != nil {
+	if err := CheckDirectoryExists(cfg.BackupPath); err != nil {
 		return fmt.Errorf("backup path check failed: %w", err)
 	}
 
@@ -216,7 +216,7 @@ func RunBackupCleanup(config *config.Config, dryRun bool) error {
 	}
 
 	// Extract volume name from path
-	volumeName := filepath.Base(config.BackupPath)
+	volumeName := filepath.Base(cfg.BackupPath)
 	log.Printf("Ejecting backup volume: %s", volumeName)
 	if err := EjectVolume(volumeName, dryRun); err != nil {
 		log.Printf("Warning: %v", err)
