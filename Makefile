@@ -1,4 +1,4 @@
-# Go の gate 一式 (版の照合 / go mod tidy の drift / vet / lint / 既知脆弱性)。
+# Go の gate 一式 (版の照合 / go mod tidy の drift / vet / go test / lint / 既知脆弱性)。
 # 写しは書き換えない (gate-kit-verify が落とす)。gate を外すなら include の前に
 #   GATE_KIT_GO_SKIP := go-vuln
 # を書く (理由もコメントで残す)。外したものは `make gate-kit-gates` に skip: として出る。
@@ -26,7 +26,7 @@ build:
 	@echo "Building..."
 	go build -o rspd ./cmd/rspd
 
-# Run tests
+# Run tests (人が読む用。ci が回すのは gate-kit の go-test = `go test ./...`)
 test:
 	@echo "Running tests..."
 	go test -v -cover ./...

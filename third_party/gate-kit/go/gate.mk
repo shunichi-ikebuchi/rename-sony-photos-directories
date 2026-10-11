@@ -15,12 +15,13 @@
 GATE_KIT_GO_DIR := $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST))))
 GATE_KIT_ROOT := $(patsubst %/,%,$(dir $(GATE_KIT_GO_DIR)))
 
-GATE_KIT_GO_ALL := gate-kit-verify go-toolchain go-tools-fresh go-mod-tidy go-vet go-lint go-vuln
+GATE_KIT_GO_ALL := gate-kit-verify go-toolchain go-tools-fresh go-mod-tidy go-vet go-test go-lint go-vuln
 GATE_KIT_GO_SKIP ?=
 GATE_KIT_GO_GATES := $(filter-out $(GATE_KIT_GO_SKIP),$(GATE_KIT_GO_ALL))
 
 GATE_KIT_GOLANGCI ?= golangci-lint
 GATE_KIT_GOVULNCHECK ?= govulncheck
+GATE_KIT_GO_TEST_FLAGS ?=
 
 .PHONY: $(GATE_KIT_GO_ALL) gate-kit-gates gate-kit-sync
 
@@ -54,6 +55,12 @@ go-mod-tidy:
 
 go-vet:
 	@go vet ./...
+
+# `ci:` に test を並べ忘れるとテストが壊れたまま緑になるので、gate 集合に入れてある
+# (2026-10-11 実測: roadmap-go が CI 無しの間に落ちていた test をそのまま抱えていた)。
+# 追加の flag が要る repo は GATE_KIT_GO_TEST_FLAGS を include の前に定義する。
+go-test:
+	@go test $(GATE_KIT_GO_TEST_FLAGS) ./...
 
 go-lint:
 	@command -v $(GATE_KIT_GOLANGCI) >/dev/null || { \
